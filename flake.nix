@@ -14,7 +14,7 @@
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           python3
-          (python3.withPackages (ps: with ps; [ pygame ]))
+          (python3.withPackages (ps: with ps; [ pygame-ce ]))
           # Maybe switch to community edition?
           black
 
