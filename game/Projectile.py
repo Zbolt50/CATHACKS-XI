@@ -1,6 +1,7 @@
 import pygame 
-class Projectile():
+class Projectile(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, image, angle):
+        pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
         self.angle= angle

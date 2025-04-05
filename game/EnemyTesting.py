@@ -48,6 +48,7 @@ Map = World(map_image)
 waypoints = random.choice(paths)
 
 wave = genterateWave(3)
+#wave = ["Grunt", "Grunt","Grunt","Grunt","Grunt","Grunt","Grunt","Grunt","Grunt","Grunt","Grunt"]
 
 enemy_group = pygame.sprite.Group()
 tower_group = pygame.sprite.Group()
@@ -81,7 +82,7 @@ while running:
     if pygame.time.get_ticks() - last_enemy_time > spwan_dely:
         if enemy_index < len(wave):
             enenmy_type = wave[enemy_index]
-            waypoints = random.choice(paths)
+            #waypoints = random.choice(paths)
             if enenmy_type == "Grunt":
                 enemy = Enemy(enenmy_type, waypoints, grunt_image)
             elif enenmy_type == "Armored":
@@ -96,15 +97,21 @@ while running:
             last_enemy_time = pygame.time.get_ticks()
     
     for p in projectiles:
+        print("bullet image")
         p.update(screen)
     
-    for e in enemy_group:
-        for p in projectiles:
-            if e.check_collisions(p):
-                print("Hit")
-                e.takeDamage(1)
-                print(e.health)
-                projectiles.remove(p)
+    for p in projectiles:
+        if p.x <= 0 or p.x >= 576 or p.y <= 0 or p.y >= 512:
+            projectiles.remove(p)
+    
+        for e in enemy_group:
+            #print(projectiles)
+            for p in projectiles:
+                if e.check_collisions(p):
+                    print("Hit")
+                    e.takeDamage(1)
+                    print(e.health)
+                    #projectiles.remove(p)
 
 
     for event in pygame.event.get():
