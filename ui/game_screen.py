@@ -4,7 +4,10 @@ from game.World import World
 from ui.frame import Frame, set_frame
 import importlib
 from ui.widget import Button, Group, Player, TowerPlacer
+from game.towers import Tower
 
+# Pillow for gif conversion
+from PIL import Image
 import pygame
 from functools import partial
 
@@ -13,9 +16,10 @@ from functools import partial
 
 towers = ["Knight", "Archer", "Wizard"]
 
+
 class GameScreen(Frame):
     def __init__(self):
-        self.s_button = Button(32, 32, 32, 32)
+        self.s_button = Button(512 + 128 + 64, 32, 32, 32)
         self.s_button.set_tip_text("settings")
         self.settings = Group(32, 32, 768 - 64, 512 - 64)
 
@@ -44,7 +48,7 @@ class GameScreen(Frame):
         self.s_button.callback = self.toggle_settings
         self.done = True
 
-        self.map = World(pygame.image.load('assets/tiles/game_loop.png'))
+        self.map = World(pygame.image.load("assets/tiles/game_loop.png"))
 
         self.tower_placer = TowerPlacer()
         self.towers = []
@@ -52,7 +56,11 @@ class GameScreen(Frame):
     def update(self, dt):
         all_keys = pygame.key.get_just_pressed()
         all_mods = pygame.key.get_pressed()
-        if all_keys[pygame.K_d] and all_mods[pygame.K_LSHIFT] and all_mods[pygame.K_LCTRL]:
+        if (
+            all_keys[pygame.K_d]
+            and all_mods[pygame.K_LSHIFT]
+            and all_mods[pygame.K_LCTRL]
+        ):
             Button.DEBUG_DRAGGABLE = not Button.DEBUG_DRAGGABLE
 
         if self.s_open:
@@ -70,10 +78,11 @@ class GameScreen(Frame):
 
     def render(self, display):
         self.map.draw(display)
-        self.s_button.render(display)
         self.sprite_menu.render(display)
+        self.s_button.render(display)
 
         for t in self.towers:
+            # t.render(display)
             pygame.draw.rect(display, (120, 120, 120, 255), t)
 
         if self.s_open:
@@ -92,6 +101,7 @@ class GameScreen(Frame):
                 self.tower_placer.tower.y = pos_y
                 self.towers.append(self.tower_placer.tower)
 
+                image = pygame.image.load("assets/towers/knight.gif")
                 self.tower_placer = TowerPlacer()
                 self.selected_tower = 0
 
@@ -104,3 +114,11 @@ class GameScreen(Frame):
 
     def set_tower(self, t):
         self.selected_tower = t
+        animation_paths = {
+            1: "assets/towers/knight.gif",
+            2: "assets/towers/archer.gif",
+            3: "assets/towers/wizard.gif",
+        }
+        animation_path = animation_paths.get(t)
+        if animation_path:
+            self.tower_placer.set_animation(animation_path)
