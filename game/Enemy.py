@@ -60,5 +60,5 @@ class Enemy(pygame.sprite.Sprite):
             world.money += Enemy_data.get(type)["Cost"]
             self.kill()
 
-
-    
+    def check_collisions(self, obj):
+        return self.rect.colliderect(obj.rect)
