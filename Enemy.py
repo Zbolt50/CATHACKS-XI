@@ -19,16 +19,19 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.center = self.pos
         self.collider = [self.orginal_image.get_width(), self.orginal_image.get_height()]
 
-    def update(self):
-        self.move()
+    def update(self, world):
+        self.move(world)
         self.rotate()
+        self.check_alive(world)
     
-    def move(self):
+    def move(self, world):
         if self.target_pos < len(self.waypoints):
             self.target = Vector2(self.waypoints[self.target_pos])
             self.movement = self.target - self.pos
         else:
             self.kill()
+            world.health -= 1
+            
 
         dist = self.movement.length()
 
@@ -52,4 +55,10 @@ class Enemy(pygame.sprite.Sprite):
         self.health -= daamge
         if self.health <= 0:
             self.kill()
+    def check_alive(self, world):
+        if self.health <= 0:
+            world.money += Enemy_data.get(type)["Cost"]
+            self.kill()
+
+
     

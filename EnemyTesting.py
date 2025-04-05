@@ -68,10 +68,40 @@ tilemap_coords_1 = [
     (176 + 64, 368),
     (176 + 64, 400),
     (80 + 64, 400),
+]
+
+waypoints1 = [
+    (160, 80),  # Start middle-left (inside border)
+    (480, 80),  # → middle-right
+    (480, 160),  # ↓
+    (160, 160),  # ←
+    (160, 240),  # ↓
+    (480, 240),  # →
+    (480, 320),  # ↓
+    (160, 320),  # ←
+    (160, 400),  # ↓
+    (480, 400),  # →
+    (480, 480),  # ↓
+    (160, 480),  # ←
+    (160, 560),  # End near bottom-left (inside border)
+]
+
+waypoints = [
+    (496 + 64, 48),
+    (368 + 64, 48),
+    (368 + 64, 144),
+    (464 + 64, 144),
+    (464 + 64, 464),
+    (368 + 64, 464),
+    (368 + 64, 368),
+    (176 + 64, 368),
+    (176 + 64, 400),
+    (80 + 64, 400),
     (80, 400),
     (80, 304),
     (16, 304),
 ]
+
 tilemap_coords_2 = [
     (496 + 64, 48),
     (368 + 64, 48),
@@ -135,12 +165,12 @@ while running:
 
     clock.tick(60)
 
-    enemy_group.update()
+    enemy_group.update(Map)
 
     screen.fill("Grey100")
     Map.draw(screen)
 
-    pygame.draw.lines(screen, ("Grey0"), False, tilemap_coords_1)
+    pygame.draw.lines(screen, ("Grey0"), False, waypoints)
 
     enemy_group.draw(screen)
 
