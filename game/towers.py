@@ -53,12 +53,12 @@ class Tower(pygame.sprite.Sprite):
                 self.state = "idle"
 
         if self.state == "idle":
-            print("findTarget")
+            #print("findTarget")
             self.findTarget(enemies)
             if self.target != None:
                 self.rotate()
         elif self.state == "attacking":
-            print("attack")
+            #print("attack")
             self.attack()
             if self.target != None:
                 self.rotate()
@@ -114,7 +114,7 @@ class Tower(pygame.sprite.Sprite):
             #self.state = "cooldown"
 
             if self.towerType == "archer" or self.towerType == "wizard":
-                print("shooting")
+                #print("shooting")
                 self.shoot(self.projetiles)
         else: 
             self.target = None
