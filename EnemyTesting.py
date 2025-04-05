@@ -11,7 +11,7 @@ spwan_dely = 400
 last_enemy_time = pygame.time.get_ticks()
 enemy_index = 0
 
-screen = pygame.display.set_mode((576,512))
+screen = pygame.display.set_mode((768,512))
 
 map_image = pygame.image.load('game_loop.png')
 
