@@ -1,6 +1,5 @@
 import pygame
 from Enemy import Enemy
-from Enemy_Data import Enemy_data
 from Waves import genterateWave
 from World import World
 
@@ -14,16 +13,16 @@ enemy_index = 0
 
 screen = pygame.display.set_mode((768, 512))
 
-map_image = pygame.image.load("game_loop.png")
+map_image = pygame.image.load("../assets/tilemap/game_loop.png")
 
 grunt_image = pygame.image.load(
-    "TestingImages/pngtree-g-letter-alphabet-golden-text-and-font-png-image_2915469.jpg"
+    "../TestingImages/pngtree-g-letter-alphabet-golden-text-and-font-png-image_2915469.jpg"
 ).convert_alpha()
-armored_image = pygame.image.load("TestingImages/Armored_Testing.jpg").convert_alpha()
+armored_image = pygame.image.load("../TestingImages/Armored_Testing.jpg").convert_alpha()
 armoredHeavy_image = pygame.image.load(
-    "TestingImages/Heavy_testing.jpg"
+    "../TestingImages/Heavy_testing.jpg"
 ).convert_alpha()
-horse_image = pygame.image.load("TestingImages/Horse_Testing.jpg").convert_alpha()
+horse_image = pygame.image.load("../TestingImages/Horse_Testing.jpg").convert_alpha()
 
 grunt_image = pygame.transform.scale(
     grunt_image, (grunt_image.get_width() * 0.1, grunt_image.get_height() * 0.1)
@@ -157,9 +156,9 @@ enemy_group = pygame.sprite.Group()
 Grunt = Enemy("Grunt", waypoints, grunt_image)
 enemy_group.add(Grunt)
 
-pygame.mixer.music.load("03.mp3")
-pygame.mixer.music.set_volume(0.3)
-pygame.mixer.music.play(-1)
+# pygame.mixer.music.load("03.mp3")
+# pygame.mixer.music.set_volume(0.3)
+# pygame.mixer.music.play(-1)
 
 while running:
 
