@@ -15,7 +15,6 @@
         buildInputs = with pkgs; [
           python3
           (python3.withPackages (ps: with ps; [ pygame-ce ]))
-          (python3.withPackages (ps: with ps; [ pillow ]))
           # Maybe switch to community edition?
           black
 
