@@ -18,6 +18,7 @@ towers = ["Knight", "Archer", "Wizard"]
 
 
 class GameScreen(Frame):
+    map = None
     def __init__(self):
         self.s_button = Button(512 + 128 + 64, 32, 32, 32)
         self.s_button.set_tip_text("settings")
@@ -48,7 +49,8 @@ class GameScreen(Frame):
         self.s_button.callback = self.toggle_settings
         self.done = True
 
-        self.map = World(pygame.image.load("assets/tiles/game_loop.png"))
+        if GameScreen.map is None:
+            GameScreen.map = World(pygame.image.load("assets/tiles/game_loop.png"))
 
         self.tower_placer = TowerPlacer()
         self.towers = []

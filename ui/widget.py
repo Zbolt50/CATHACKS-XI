@@ -1,11 +1,16 @@
+import importlib
 import math
 
 # necessary for annotation
 from abc import ABC, abstractmethod
+from functools import partial
 from typing import List
 
 import pygame
 from PIL import Image
+
+from game.World import World
+from game.towers import Tower
 
 
 class Widget(ABC):
@@ -164,16 +169,43 @@ class Player(Widget):
 
 
 class TowerStats(Widget):
-    def __init__(self, x, y):
+    def __init__(self, x, y, tower: Tower):
         self.rect = pygame.rect.Rect(x, y, 128, 196)
         self.surf = pygame.surface.Surface((128, 196))
         self.close_button = Button(x, y, 64, 64)
+        self.upgrade_button = Button(x, y, 64, 64)
+
+        self.target_tower: Tower = tower
+
+        upgrader = partial(self.upgrade_tower, self.target_tower)
+        self.upgrade_button.callback = upgrader
+        self.hide = True
 
     def update(self, dt):
-        pass
+        if not self.hide:
+            self.close_button.update(dt)
+            self.upgrade_button.update(dt)
 
     def render(self, display):
-        pass
+        if not self.hide:
+            self.close_button.update(display)
+            self.upgrade_button.update(display)
+
+    def hide(self):
+        self.hide = True
+    game_screen = None
+    def upgrade_tower(self, tower):
+        if Widget.game_screen is None:
+            Widget.game_screen = importlib.import_module("ui.game_screen")
+
+        upgrade_money = 0
+        match tower.towerType:
+            case "knight": upgrade_money = 100
+            case "archer": upgrade_money = 80
+            case "wizard": upgrade_money = 120
+        if Widget.game_screen.GameScreen.map.money > upgrade_money:
+            tower.upgradeTowerFlag()
+            Widget.game_screen.GameScreen.map.money -= upgrade_money
 
 
 class TowerPlacer(Widget):
