@@ -17,7 +17,6 @@ from functools import partial
 
 towers = ["Knight", "Archer", "Wizard"]
 
-
 class GameScreen(Frame):
     map = None
     def __init__(self):
@@ -58,6 +57,7 @@ class GameScreen(Frame):
         self.selected_tower = 0
         self.s_open = False
         self.s_button.callback = self.toggle_settings
+
         self.done = True
 
         if GameScreen.map is None:
@@ -83,6 +83,9 @@ class GameScreen(Frame):
             set_frame(GameOver())
         self.sprite_menu.widgets[0].money = GameScreen.map.money
         #print(GameScreen.map.money)
+
+
+
 
         for t in self.map.tower_group:
             if t.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
@@ -110,6 +113,11 @@ class GameScreen(Frame):
             o.render(display)
         self.sprite_menu.render(display)
         self.s_button.render(display)
+
+        text_surface = Button.text_font.render(
+            "wave: " + str(GameScreen.map.level), False, (232, 232, 232), (0, 0, 0)
+        )
+        display.blit(text_surface, (18 * 32 + 32, 8 * 32 - 32, 128, 32))
 
         for img, img_loc in zip(self.images, self.img_poses):
             display.blit(img, img_loc)

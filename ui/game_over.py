@@ -14,3 +14,5 @@ class GameOver(Frame):
     def __init__(self):
         self.game_over_logo = pygame.image.load("./assets/tiles/pngs/game_over.png")
         self.game_over_logo = pygame.transform.scale(self.game_over_logo, (64 * 4, 32 * 4))
+        pygame.mixer.stop()
+        pygame.mixer.quit()
