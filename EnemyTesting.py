@@ -51,6 +51,22 @@ waypoints = [
     (160, 560)    # End near bottom-left (inside border)
 ]
 
+tilemap_coords_1 = [
+    (496+64, 48),
+    (368+64, 48),
+    (368+64, 144),
+    (464+64, 144),
+    (464+64, 464),
+    (368+64, 464),
+    (368+64, 368),
+    (176+64, 368),
+    (176+64, 400),
+    (80+64, 400),
+    (80, 400),
+    (80, 304),
+    (16, 304)
+]
+
 wave = genterateWave(3)
 
 enemy_group = pygame.sprite.Group()
@@ -71,7 +87,7 @@ while running:
     screen.fill("Grey100")
     Map.draw(screen)
 
-    pygame.draw.lines(screen, ("Grey0"),  False, waypoints)
+    pygame.draw.lines(screen, ("Grey0"),  False, tilemap_coords_1)
 
     enemy_group.draw(screen)
 
