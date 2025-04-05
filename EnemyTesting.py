@@ -35,7 +35,7 @@ armoredHeavy_image = pygame.transform.scale(armoredHeavy_image,
 
 Map = World(map_image)
 
-waypoints = [
+waypoints1 = [
     (160, 80),    # Start middle-left (inside border)
     (480, 80),    # → middle-right
     (480, 160),   # ↓
@@ -51,7 +51,7 @@ waypoints = [
     (160, 560)    # End near bottom-left (inside border)
 ]
 
-tilemap_coords_1 = [
+waypoints = [
     (496+64, 48),
     (368+64, 48),
     (368+64, 144),
@@ -71,7 +71,7 @@ wave = genterateWave(3)
 
 enemy_group = pygame.sprite.Group()
 
-Grunt = Enemy("Grunt", waypoints,grunt_image)
+Grunt = Enemy("Grunt",waypoints,grunt_image)
 enemy_group.add(Grunt)
 
 pygame.mixer.music.load("03.mp3")
@@ -82,12 +82,12 @@ while running:
 
     clock.tick(60)
 
-    enemy_group.update()
+    enemy_group.update(Map)
 
     screen.fill("Grey100")
     Map.draw(screen)
 
-    pygame.draw.lines(screen, ("Grey0"),  False, tilemap_coords_1)
+    pygame.draw.lines(screen, ("Grey0"),  False, waypoints)
 
     enemy_group.draw(screen)
 
