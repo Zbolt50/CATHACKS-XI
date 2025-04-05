@@ -7,7 +7,6 @@ from functools import partial
 from typing import List
 
 import pygame
-from PIL import Image
 
 from game.World import World
 from game.towers import Tower

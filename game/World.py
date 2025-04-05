@@ -6,7 +6,6 @@ from game.Path import paths
 from game.Waves import genterateWave
 from game.towers import Tower
 
-from PIL import Image
 
 
 class World():
