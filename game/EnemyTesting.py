@@ -1,7 +1,9 @@
 import pygame
 from Enemy import Enemy
+from towers import Tower
 from Waves import genterateWave
 from World import World
+from Projectile import Projectile
 
 pygame.init()
 
@@ -10,6 +12,7 @@ clock = pygame.time.Clock()
 spwan_dely = 400
 last_enemy_time = pygame.time.get_ticks()
 enemy_index = 0
+projectiles = []
 
 screen = pygame.display.set_mode((768, 512))
 
@@ -152,9 +155,12 @@ tilemap_coords_4 = [
 wave = genterateWave(3)
 
 enemy_group = pygame.sprite.Group()
+tower_group = pygame.sprite.Group()
 
 Grunt = Enemy("Grunt", waypoints, grunt_image)
+Archer = Tower(grunt_image,400, 400, "archer", projectiles)
 enemy_group.add(Grunt)
+tower_group.add(Archer)
 
 pygame.mixer.music.load("03.mp3")
 pygame.mixer.music.set_volume(0.3)
@@ -165,6 +171,7 @@ while running:
     clock.tick(60)
 
     enemy_group.update(Map)
+    tower_group.update(enemy_group)
 
     screen.fill("Grey100")
     Map.draw(screen)
@@ -173,6 +180,7 @@ while running:
     pygame.draw.lines(screen, ("Grey100"), False, tilemap_coords_2)
 
     enemy_group.draw(screen)
+    tower_group.draw(screen)
 
     if pygame.time.get_ticks() - last_enemy_time > spwan_dely:
         if enemy_index < len(wave):
@@ -189,6 +197,9 @@ while running:
             enemy_group.add(enemy)
             enemy_index += 1
             last_enemy_time = pygame.time.get_ticks()
+    
+    for p in projectiles:
+        p.update(screen)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
