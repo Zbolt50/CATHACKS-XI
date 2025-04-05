@@ -1,3 +1,4 @@
+import os
 import pygame
 import math
 from Projectile import Projectile
@@ -46,11 +47,13 @@ class Tower(pygame.sprite.Sprite):
 
     def update(self, enemies): # enemies is Group
         if self.state == "cooldown":
-            #print("cooldown")
+            print("cooldown")
             self.cooldownFrames -= 5
             if self.cooldownFrames <= 0:
                 self.cooldownFrames = 0
                 self.state = "idle"
+                self.target = None
+                self.state = "wait"
 
         if self.state == "idle":
             print("findTarget")
@@ -63,15 +66,18 @@ class Tower(pygame.sprite.Sprite):
             if self.target != None:
                 self.rotate()
         elif self.state == "upgrading":
-            #print("upgrading")
+            print("upgrading")
             self.upgradeTower() 
         elif self.state == "targeting":
-            #print("targeting")
+            print("targeting")
             if self.targetInRange():
                 self.state = "attacking"
             else:
                 self.target = None
                 self.state = "idle"
+        elif self.state == "wait":
+            print("wait")
+            self.state = "idle"
 
     # call this in the game loop to upgrade the tower
     def upgradeTowerFlag(self):
@@ -106,16 +112,24 @@ class Tower(pygame.sprite.Sprite):
 
     def attack(self):
         if self.cooldownFrames > 0:
+            self.state = "cooldown"
             return
         
-        if self.target is not None and self.targetInRange():
-            #self.target.takeDamage(self.damage)
-            #self.cooldownFrames = self.attackCD
-            #self.state = "cooldown"
+        if self.target is not None and self.target.health <= 0:
+            self.target = None
+            self.state = "idle"
+            return
 
-            if self.towerType == "archer" or self.towerType == "wizard":
+        if self.target is not None and self.targetInRange():
+            if self.towerType == "knight":
+                self.target.takeDamage(self.damage)
+                self.cooldownFrames = self.attackCD
+                self.state = "cooldown"
+            else:
                 print("shooting")
                 self.shoot(self.projetiles)
+                self.cooldownFrames = self.attackCD
+                self.state = "cooldown"
         else: 
             self.target = None
             self.state = "idle"
@@ -124,11 +138,10 @@ class Tower(pygame.sprite.Sprite):
             self.target = None
             self.state = "idle"
 
-    # idk how to do this lfg
     def shoot(self,projectiles):
         tower_center = self.rect.center
         projectile = Projectile(tower_center[0], tower_center[1], 8, 8,
-                                 pygame.image.load("../TestingImages/pngtree-g-letter-alphabet-golden-text-and-font-png-image_2915469.jpg"),
+                                 pygame.image.load(os.path.join("TestingImages", "pngtree-g-letter-alphabet-golden-text-and-font-png-image_2915469.jpg")),
                                  self.angle)
         target_center = self.target.rect.center
         direction_x = target_center[0] - tower_center[0]
@@ -141,6 +154,8 @@ class Tower(pygame.sprite.Sprite):
 
         projectile_speed = 5
         projectile.velocity = [direction_x * projectile_speed, direction_y * projectile_speed]
+        self.target.takeDamage(self.damage)
+
         projectiles.append(projectile)
 
     def rotate(self):
