@@ -9,8 +9,10 @@ class MainMenu(Frame):
     def __init__(self):
         self.title = None
         self.start_button = Button(160, 304, 128, 32)
+        self.start_button.color = pygame.color.Color(0, 0, 0)
         self.start_button.set_text("start game")
         self.quit_button = Button(480, 304, 128, 32)
+        self.quit_button.color = pygame.color.Color(0, 0, 0)
         self.quit_button.set_text("quit game")
 
         self.start_button.callback = self.start_game
@@ -20,15 +22,17 @@ class MainMenu(Frame):
         self.fade_in = pygame.rect.Rect(0, 0, 768, 512)
         self.timer = 0.0
 
-        self.title_card = Button(0, 0, 512, 256)
+        self.title_card = pygame.image.load("./assets/tiles/pngs/title.png")
+
+        pygame.mixer.music.load("./assets/03.mp3")
+        pygame.mixer.music.set_volume(0.6)
+        pygame.mixer.music.play(-1)
 
     def update(self, dt):
         self.timer += dt
 
         self.start_button.update(dt)
         self.quit_button.update(dt)
-
-        self.title_card.update(dt)
 
         if self.timer > (1.0 / 8.0):
             self.timer = 0.0
@@ -46,8 +50,8 @@ class MainMenu(Frame):
     def render(self, display=pygame.display.get_surface()):
         self.start_button.render(display)
         self.quit_button.render(display)
-        self.title_card.render(display)
         pygame.draw.rect(display, (0, 0, 0), self.fade_in)
+        display.blit(self.title_card)
 
     def start_game(self):
         set_frame(GameScreen())

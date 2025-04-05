@@ -74,6 +74,10 @@ class Button(Widget):
         self.timer += dt
         if self.rect.collidepoint(pygame.mouse.get_pos()):
             self.display_tooltip = True
+            if pygame.mouse.get_just_pressed()[0]:
+                s = pygame.mixer.Sound("./sounds/whenUserClick.wav")
+                s.set_volume(0.3)
+                s.play(0)
             if pygame.mouse.get_pressed()[0]:
                 self.damp = 2
 
@@ -111,7 +115,7 @@ class Button(Widget):
         self.surf.fill(new_color)
         display.blit(self.surf, self.rect)
         self.text_surface = Button.text_font.render(
-            self.text, False, (232, 232, 232), new_color
+            self.text, False, pygame.color.Color(232, 232, 232).lerp("black", 0.3 * self.damp), new_color
         )
         if len(self.tip_text) != 0 and self.display_tooltip:
             mouse_pos = list(pygame.mouse.get_pos())
@@ -170,88 +174,61 @@ class Player(Widget):
 
 class TowerStats(Widget):
     def __init__(self, x, y, tower: Tower):
-        self.rect = pygame.rect.Rect(x, y, 128, 196)
-        self.surf = pygame.surface.Surface((128, 196))
-        self.close_button = Button(x, y, 64, 64)
-        self.upgrade_button = Button(x, y, 64, 64)
+        self.rect = pygame.rect.Rect(x, y, 6 * 32, 6 * 32)
+        self.surf = pygame.surface.Surface((6 * 32, 6 * 32))
+        self.close_button = Button(x, y, 32, 32)
+        self.close_icon = pygame.image.load("./assets/tiles/pngs/exit.png")
+        self.upgrade_button = Button(x+64, y, 32, 32)
+        self.upgrade_icon = pygame.image.load("./assets/tiles/pngs/upgrade.png")
 
         self.target_tower: Tower = tower
 
         upgrader = partial(self.upgrade_tower, self.target_tower)
         self.upgrade_button.callback = upgrader
-        self.hide = True
+        self.hidden = False
+
+        self.close_button.callback = self.hide
 
     def update(self, dt):
-        if not self.hide:
+        if not self.hidden:
             self.close_button.update(dt)
             self.upgrade_button.update(dt)
 
     def render(self, display):
-        if not self.hide:
-            self.close_button.update(display)
-            self.upgrade_button.update(display)
+        if not self.hidden:
+            pygame.draw.rect(display, (80, 80, 80), self.rect)
+            self.close_button.render(display)
+            display.blit(self.close_icon, self.close_button.rect)
+            self.upgrade_button.render(display)
+            display.blit(self.upgrade_icon, self.upgrade_button.rect)
 
     def hide(self):
-        self.hide = True
+        self.hidden = True
     game_screen = None
     def upgrade_tower(self, tower):
-        if Widget.game_screen is None:
-            Widget.game_screen = importlib.import_module("ui.game_screen")
+        if TowerStats.game_screen is None:
+            TowerStats.game_screen = importlib.import_module("ui.game_screen")
 
         upgrade_money = 0
         match tower.towerType:
             case "knight": upgrade_money = 100
             case "archer": upgrade_money = 80
             case "wizard": upgrade_money = 120
-        if Widget.game_screen.GameScreen.map.money > upgrade_money:
+        if TowerStats.game_screen.GameScreen.map.money > upgrade_money:
             tower.upgradeTowerFlag()
-            Widget.game_screen.GameScreen.map.money -= upgrade_money
+            TowerStats.game_screen.GameScreen.map.money -= upgrade_money
 
 
 class TowerPlacer(Widget):
-    def __init__(self):
+    def __init__(self, tower):
         self.surf = pygame.surface.Surface((32, 32))
         # Render animation here
-        self.tower = pygame.rect.Rect(0, 0, 32, 32)
-        self.animation_frames = []
-        self.animation_index = 0
-        self.animation_timer = 0
-        self.frame_duration = 0.1
+        self.tower = tower
 
     def update(self, dt):
         mouse_pos = pygame.mouse.get_pos()
-        self.tower.x = mouse_pos[0]
-        self.tower.y = mouse_pos[1]
-
-        if self.animation_frames:
-            self.animation_timer += dt
-            if self.animation_timer > self.frame_duration:
-                self.animation_timer = 0
-                self.animation_index = (self.animation_index + 1) % len(
-                    self.animation_frames
-                )
+        self.tower.rect.x = mouse_pos[0]
+        self.tower.rect.y = mouse_pos[1]
 
     def render(self, display):
-        if self.animation_frames:
-            frame = self.animation_frames[self.animation_index]
-            display.blit(frame, (self.tower.x, self.tower.y))
-        else:
-            pygame.draw.rect(display, (120, 120, 120, 255), self.tower)
-
-    def set_animation(self, path_to_gif):
-        self.animation_frames = []
-        self.animation_index = 0
-        self.animation_timer = 0
-
-        pil_image = Image.open(path_to_gif)
-        try:
-            while True:
-                frame = pil_image.convert("RGBA")
-                pygame_image = pygame.image.frombytes(
-                    frame.tobytes(), frame.size, "RGBA"
-                )
-                self.animation_frames.append(pygame_image)
-                pil_image.seek(pil_image.tell() + 1)
-
-        except EOFError:
-            pass
+        display.blit(self.tower.image)

@@ -1,10 +1,9 @@
 import pygame
 import random
-from Enemy_Data import Enemy_data
 def genterateWave(level):
     level = level
-    base_threat = 10
-    level_multiplayer = level + 5
+    base_threat = 20
+    level_multiplayer = level
     threat_total = base_threat * level_multiplayer
     wave = []
     while threat_total > 0:
@@ -21,5 +20,4 @@ def genterateWave(level):
             wave.append("Grunt")
             threat_total -= 1
 
-    print(wave)
     return wave

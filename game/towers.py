@@ -1,7 +1,10 @@
 #import os
+import importlib
+
 import pygame
 import math
-from Projectile import Projectile
+from game.Projectile import Projectile
+
 
 class Tower(pygame.sprite.Sprite):
     def __init__(self,image, x, y, towerType,projectiles):
@@ -10,10 +13,12 @@ class Tower(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.angle = 0
-        self.orginal_image = image
-        self.image = pygame.transform.rotate(self.orginal_image, self.angle)
-        self.rect = self.image.get_rect()
-        self.rect.center = (self.x, self.y)
+        self.image = image
+        if self.image is not None:
+            self.rect = self.image.get_rect()
+            self.rect.center = (self.x, self.y)
+        else:
+            self.rect = pygame.rect.Rect(0, 0, 0, 0)
         self.updgradeLevel = 1
         self.state = "idle"
         self.target = None
@@ -23,13 +28,14 @@ class Tower(pygame.sprite.Sprite):
         self.setTowerStats()
         self.attackCD = int((self.cooldown * 60) / 1000)
         self.projetiles = projectiles
-        
+
+
 
     def setTowerStats(self):
         if self.towerType == "knight":
-            self.range = 100 
+            self.range = 64
             self.attackSpeed = 1
-            self.damage = 15
+            self.damage = 200
             self.cost = 100
             self.cooldown = 500
         elif self.towerType == "archer":
@@ -45,7 +51,37 @@ class Tower(pygame.sprite.Sprite):
             self.cost = 120
             self.cooldown = 200
 
-    def update(self, enemies): # enemies is Group
+    def render(self, display):
+        for p in self.projetiles:
+            #print("bullet image")
+            p.update(display)
+
+    game_screen = None
+    def update(self, dt, enemies): # enemies is Group
+        if Tower.game_screen is None:
+            Tower.game_screen = importlib.import_module("ui.game_screen")
+        # self.anim_timer += dt
+        # if self.anim_timer > 0.1:
+            #pass
+            #self.image =
+
+        to_remove = []
+        for p in self.projetiles:
+            if p.x <= 0 or p.x >= 576 or p.y <= 0 or p.y >= 512:
+                self.projetiles.remove(p)
+
+            #print(p.rect)
+            for e in enemies:
+                if e.check_collisions(p):
+                    #print("Hit")
+                    e.takeDamage(100, Tower.game_screen.GameScreen.map)
+                    #print(e.health)
+                    to_remove.append(p)
+        for k in to_remove:
+            try:
+                self.projetiles.remove(k)
+            except:
+                pass
         if self.state == "cooldown":
             #print("cooldown")
             self.cooldownFrames -= 5
@@ -58,6 +94,7 @@ class Tower(pygame.sprite.Sprite):
         if self.state == "idle":
             #print("findTarget")
             self.findTarget(enemies)
+            #print(enemies)
             if self.target != None:
                 self.rotate()
         elif self.state == "attacking":
@@ -102,12 +139,14 @@ class Tower(pygame.sprite.Sprite):
         x_dist = 0
         y_dist = 0
         for enemy in enemies:
+            distance = 100000000
             if enemy.health > 0:
                 distance = ((self.x - enemy.pos[0]) ** 2 + (self.y - enemy.pos[1]) ** 2) ** 0.5 # pythagorean theorem
             if distance <= self.range:
                 self.target = enemy
                 self.angle = math.degrees(math.atan2(-y_dist,x_dist))
                 self.state = "targeting"
+                #print(self.range)
                 break
 
     def attack(self):
@@ -122,11 +161,11 @@ class Tower(pygame.sprite.Sprite):
 
         if self.target is not None and self.targetInRange():
             if self.towerType == "knight":
-                #self.target.takeDamage(self.damage)
+                self.target.takeDamage(self.damage, Tower.game_screen.GameScreen.map)
                 self.cooldownFrames = self.attackCD
                 self.state = "cooldown"
             else:
-                print("shooting")
+                #print("shooting")
                 self.shoot(self.projetiles)
                 self.cooldownFrames = self.attackCD
                 self.state = "cooldown"
@@ -141,7 +180,7 @@ class Tower(pygame.sprite.Sprite):
     def shoot(self,projectiles):
         tower_center = self.rect.center
         projectile = Projectile(tower_center[0], tower_center[1], 8, 8,
-                                 pygame.image.load("../TestingImages/pngtree-g-letter-alphabet-golden-text-and-font-png-image_2915469.jpg"),
+                                 pygame.image.load("./assets/tiles/pngs/sword_ui.png"),
                                  self.angle)
         target_center = self.target.rect.center
         direction_x = target_center[0] - tower_center[0]
@@ -159,8 +198,9 @@ class Tower(pygame.sprite.Sprite):
         projectiles.append(projectile)
 
     def rotate(self):
+        return
         dist = self.target.pos - [self.x, self.y]
         self.angle = math.degrees(math.atan2(-dist[1],dist[0]))
-        self.image = pygame.transform.rotate(self.orginal_image, self.angle)
+        self.image = pygame.transform.rotate(self.image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)

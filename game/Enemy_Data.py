@@ -1,22 +1,22 @@
 Enemy_data = {
     "Grunt": {
         "Cost": 10,
-        "Health":100,
+        "Health":300,
         "Speed": 2
     },
     "Armored": {
         "Cost": 30,
-        "Health":200,
+        "Health":600,
         "Speed": 1.5
     },
     "Heavy Armored": {
         "Cost": 50,
-        "Health":500,
+        "Health":1500,
         "Speed": 1
     },
     "Horse": {
         "Cost": 75,
-        "Health":400,
+        "Health":1200,
         "Speed": 3
     },
     "Boss": {

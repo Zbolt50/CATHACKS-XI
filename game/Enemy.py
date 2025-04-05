@@ -1,6 +1,6 @@
 import pygame 
 from pygame.math import Vector2
-from Enemy_Data import Enemy_data
+from game.Enemy_Data import Enemy_data
 import math
 
 class Enemy(pygame.sprite.Sprite):
@@ -51,13 +51,16 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 
-    def takeDamage(self, daamge):
+    def takeDamage(self, daamge, world):
         self.health -= daamge
         if self.health <= 0:
+            world.money += self.type["Cost"]
+            s = pygame.mixer.Sound("./sounds/whenEnemyDead.wav")
+            s.set_volume(0.1)
+            s.play(0)
             self.kill()
     def check_alive(self, world):
         if self.health <= 0:
-            world.money += Enemy_data.get(type)["Cost"]
             self.kill()
 
     def check_collisions(self, obj):

@@ -1,7 +1,6 @@
 import pygame 
-class Projectile(pygame.sprite.Sprite):
+class Projectile():
     def __init__(self, x, y, width, height, image, angle):
-        pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
         self.angle= angle
@@ -20,6 +19,7 @@ class Projectile(pygame.sprite.Sprite):
     def update(self, screen):
         self.x += self.velocity[0]
         self.y += self.velocity[1]
+        self.rect.center = (self.x, self.y)
         self.draw(screen)
         self.rotate()
         

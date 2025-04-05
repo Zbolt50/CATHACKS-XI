@@ -97,7 +97,7 @@ while running:
             last_enemy_time = pygame.time.get_ticks()
     
     for p in projectiles:
-        print("bullet image")
+        #print("bullet image")
         p.update(screen)
     
     for p in projectiles:
