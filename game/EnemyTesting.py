@@ -156,9 +156,9 @@ enemy_group = pygame.sprite.Group()
 Grunt = Enemy("Grunt", waypoints, grunt_image)
 enemy_group.add(Grunt)
 
-# pygame.mixer.music.load("03.mp3")
-# pygame.mixer.music.set_volume(0.3)
-# pygame.mixer.music.play(-1)
+pygame.mixer.music.load("03.mp3")
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(-1)
 
 while running:
 
@@ -170,6 +170,7 @@ while running:
     Map.draw(screen)
 
     pygame.draw.lines(screen, ("Grey0"), False, waypoints)
+    pygame.draw.lines(screen, ("Grey100"), False, tilemap_coords_2)
 
     enemy_group.draw(screen)
 
