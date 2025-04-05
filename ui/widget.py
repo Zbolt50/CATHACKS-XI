@@ -1,7 +1,35 @@
 import math
+
+# necessary for annotation
+from abc import ABC, abstractmethod
+from typing import List
+
 import pygame
 
-class Button:
+class Widget(ABC):
+    @abstractmethod
+    def update(self, dt):
+        pass
+    @abstractmethod
+    def render(self, display):
+        pass
+
+class Group(Widget):
+    def __init__(self, x, y, width, height):
+        self.widgets: List[Widget] = []
+        self.rect = pygame.rect.Rect(x, y, width, height)
+        self.surf = pygame.surface.Surface((width, height))
+        self.color = pygame.color.Color((200, 200, 200, 255))
+
+    def update(self, dt):
+        for w in self.widgets:
+            w.update(dt)
+    def render(self, display):
+        display.blit(self.surf, self.rect)
+        for w in self.widgets:
+            w.render(display)
+
+class Button(Widget):
     DEBUG_DRAGGABLE = True
 
     text_font = None
@@ -44,7 +72,10 @@ class Button:
             self.display_tooltip = False
 
         if Button.DEBUG_DRAGGABLE and self.timer > 1.0:
-            print("DEBUG: rectangle: " + str(self.rect))
+            if len(self.tiptext) != 0:
+                print("DEBUG: " + self.tiptext + ": " + str(self.rect))
+            else:
+                print("DEBUG: _rectangle: " + str(self.rect))
             self.timer = 0
 
     def render(self, display=pygame.display.get_surface()):
@@ -64,3 +95,14 @@ class Button:
     def set_text(self, text):
         self.tiptext = text
         self.tiptextsurface = Button.text_font.render(self.tiptext, False, (232, 232, 232), (0, 0, 0))
+
+class TowerStats(Widget):
+    def __init__(self, x, y):
+        self.rect = pygame.rect.Rect(x, y, 128, 196)
+        self.surf = pygame.surface.Surface((128, 196))
+        self.close_button = Button(x, y, 64, 64)
+
+    def update(self, dt):
+        pass
+    def render(self, display):
+        pass

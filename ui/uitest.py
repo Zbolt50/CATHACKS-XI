@@ -1,5 +1,6 @@
 import pygame
 import main_menu
+import game_screen
 
 # pygame setup
 pygame.init()
@@ -8,6 +9,7 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 mm = main_menu.MainMenu()
+gs = game_screen.GameScreen()
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -19,8 +21,13 @@ while running:
     screen.fill("red")
 
     # RENDER YOUR GAME HERE
-    mm.update(dt)
-    mm.render(screen)
+    if not mm.done:
+        mm.update(dt)
+        mm.render(screen)
+    else:
+        gs.update(dt)
+        gs.render(screen)
+
 
     # flip() the display to put your work on screen
     pygame.display.flip()
