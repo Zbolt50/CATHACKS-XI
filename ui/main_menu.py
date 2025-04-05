@@ -4,6 +4,7 @@ from ui.frame import Frame, set_frame
 from ui.game_screen import GameScreen
 from ui.widget import Button
 
+
 class MainMenu(Frame):
     def __init__(self):
         self.title = None
@@ -35,16 +36,21 @@ class MainMenu(Frame):
 
         all_keys = pygame.key.get_just_pressed()
         all_mods = pygame.key.get_pressed()
-        if all_keys[pygame.K_d] and all_mods[pygame.K_LSHIFT] and all_mods[pygame.K_LCTRL]:
+        if (
+            all_keys[pygame.K_d]
+            and all_mods[pygame.K_LSHIFT]
+            and all_mods[pygame.K_LCTRL]
+        ):
             Button.DEBUG_DRAGGABLE = not Button.DEBUG_DRAGGABLE
+
     def render(self, display=pygame.display.get_surface()):
         self.start_button.render(display)
         self.quit_button.render(display)
         self.title_card.render(display)
         pygame.draw.rect(display, (0, 0, 0), self.fade_in)
 
-
     def start_game(self):
         set_frame(GameScreen())
+
     def quit_game(self):
         pygame.event.post(pygame.event.Event(pygame.QUIT))
