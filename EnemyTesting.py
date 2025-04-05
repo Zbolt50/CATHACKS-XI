@@ -58,6 +58,10 @@ enemy_group = pygame.sprite.Group()
 Grunt = Enemy("Grunt", waypoints,grunt_image)
 enemy_group.add(Grunt)
 
+pygame.mixer.music.load("03.mp3")
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(-1)
+
 while running:
 
     clock.tick(60)
