@@ -2,7 +2,7 @@ import pygame
 import math
 
 class Tower(pygame.sprite.Sprite):
-    def __init__(self,image, x, y, towerType):
+    def __init__(self, image, x, y, towerType):
         pygame.sprite.Sprite.__init__(self)
         self.towerType = towerType
         self.x = x
