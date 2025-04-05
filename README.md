@@ -10,7 +10,7 @@ Features
 
 
 ### Credits: 
-- Brycen Daniels
 - Ben Carey
+- Brycen Daniels
 - Andrew Hostettler
 - Zeke Boggs
