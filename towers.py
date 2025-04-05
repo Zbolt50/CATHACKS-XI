@@ -1,11 +1,17 @@
 import pygame
+import math
 
 class Tower(pygame.sprite.Sprite):
-    def __init__(self, x, y, towerType):
-        super().__init__()  
+    def __init__(self,image, x, y, towerType):
+        pygame.sprite.Sprite.__init__(self)
         self.towerType = towerType
         self.x = x
         self.y = y
+        self.angle = 0
+        self.orginal_image = image
+        self.image = pygame.transform.rotate(self.orginal_image, self.angle)
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.x, self.y)
         self.updgradeLevel = 1
         self.state = "idle"
         self.target = None
@@ -93,11 +99,15 @@ class Tower(pygame.sprite.Sprite):
         distance = ((self.x - self.target.pos[0]) ** 2 + (self.y - self.target.pos[1]) ** 2) ** 0.5 # pythagorean theorem
         return distance <= self.range
 
-    def findTarget(self, enemies):
-        for enemy in enemies:
-            distance = ((self.x - enemy.pos[0]) ** 2 + (self.y - enemy.pos[1]) ** 2) ** 0.5 # pythagorean theorem
+    def findTarget(self, enemy_group):
+        x_dist = 0
+        y_dist = 0
+        for enemy in enemy_group:
+            if enemy.health > 0:
+                distance = ((self.x - enemy.pos[0]) ** 2 + (self.y - enemy.pos[1]) ** 2) ** 0.5 # pythagorean theorem
             if distance <= self.range:
                 self.target = enemy
+                self.angle = math.degrees(math.atan2(-y_dist,x_dist))
                 self.state = "targeting"
                 break
 
