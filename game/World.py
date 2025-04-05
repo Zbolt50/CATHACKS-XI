@@ -158,14 +158,18 @@ class World():
             if self.enemy_index < len(self.wave):
                 waypoints = random.choice(paths)
                 enenmy_type = self.wave[self.enemy_index]
+                enemy = None
                 if enenmy_type == "Grunt":
                     enemy = Enemy(enenmy_type, waypoints, World.grunt_image)
                 elif enenmy_type == "Armored":
                     enemy = Enemy(enenmy_type, waypoints, World.armored_image)
                 elif enenmy_type == "Heavy Armored":
                     enemy = Enemy(enenmy_type, waypoints, World.armoredHeavy_image)
-                elif enenmy_type == "Horse":
+                else:
                     enemy = Enemy(enenmy_type, waypoints, World.horse_image)
+
+                enemy.health += self.level * self.level * 100
+
 
                 self.enemy_group.add(enemy)
                 self.enemy_index += 1

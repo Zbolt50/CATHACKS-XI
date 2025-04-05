@@ -82,7 +82,7 @@ class GameScreen(Frame):
         if self.sprite_menu.widgets[0].health <= 0:
             set_frame(GameOver())
         self.sprite_menu.widgets[0].money = GameScreen.map.money
-        print(GameScreen.map.money)
+        #print(GameScreen.map.money)
 
         for t in self.map.tower_group:
             if t.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:

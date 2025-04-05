@@ -108,9 +108,9 @@ while running:
             #print(projectiles)
             for p in projectiles:
                 if e.check_collisions(p):
-                    print("Hit")
+                    #print("Hit")
                     e.takeDamage(1)
-                    print(e.health)
+                    #print(e.health)
                     #projectiles.remove(p)
 
 
