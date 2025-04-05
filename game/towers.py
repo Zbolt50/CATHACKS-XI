@@ -17,7 +17,7 @@ class Tower(pygame.sprite.Sprite):
         self.state = "idle"
         self.target = None
         self.direction = "right"
-        self.cooldownFrames = 0
+        self.cooldownFrames = -10
         self.cooldown = 0
         self.setTowerStats()
         self.attackCD = int((self.cooldown * 60) / 1000)
@@ -109,9 +109,9 @@ class Tower(pygame.sprite.Sprite):
             return
         
         if self.target is not None and self.targetInRange():
-            self.target.takeDamage(self.damage)
-            self.cooldownFrames = self.attackCD
-            self.state = "cooldown"
+            #self.target.takeDamage(self.damage)
+            #self.cooldownFrames = self.attackCD
+            #self.state = "cooldown"
 
             if self.towerType == "archer" or self.towerType == "wizard":
                 print("shooting")
