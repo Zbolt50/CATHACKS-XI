@@ -16,19 +16,22 @@
             "scaleInEditor": 1
         },
         "tiles/game_loop.json": {
-            "scale": 1.327690972222222,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 4,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 288.0941484145146,
-                "y": 256.08368747956854
+                "x": 475.875,
+                "y": 93.75
             }
         },
         "tiles/game_loop.tmx": {
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 259.5,
-                "y": 309
+                "x": 374.5,
+                "y": 307
             }
         },
         "tiles/game_set.tsx": {
@@ -48,10 +51,11 @@
         "tiles/game_loop.tmx"
     ],
     "project": "cathacks.tiled-project",
+    "property.type": "int",
     "recentFiles": [
+        "tiles/game_set.tsx",
         "tiles/cathacks_tiles.tsx",
-        "tiles/game_loop.tmx",
-        "tiles/game_set.tsx"
+        "tiles/game_loop.tmx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
