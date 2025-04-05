@@ -22,6 +22,7 @@ class Enemy(pygame.sprite.Sprite):
     def update(self, world):
         self.move(world)
         self.rotate()
+        self.check_alive(world)
     
     def move(self, world):
         if self.target_pos < len(self.waypoints):
@@ -54,4 +55,10 @@ class Enemy(pygame.sprite.Sprite):
         self.health -= daamge
         if self.health <= 0:
             self.kill()
+    def check_alive(self, world):
+        if self.health <= 0:
+            world.money += Enemy_data.get(type)["Cost"]
+            self.kill()
+
+
     
