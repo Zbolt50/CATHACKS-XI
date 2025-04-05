@@ -54,4 +54,3 @@ class MainMenu(Frame):
 
     def quit_game(self):
         pygame.event.post(pygame.event.Event(pygame.QUIT))
-
