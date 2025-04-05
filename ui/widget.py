@@ -177,10 +177,10 @@ class TowerStats(Widget):
 
 
 class TowerPlacer(Widget):
-    def __init__(self, tower):
+    def __init__(self):
         self.surf = pygame.surface.Surface((32, 32))
         # Render animation here
-        self.tower = tower
+        self.tower = pygame.rect.Rect(0, 0, 32, 32)
         self.animation_frames = []
         self.animation_index = 0
         self.animation_timer = 0

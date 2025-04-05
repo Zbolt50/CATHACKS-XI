@@ -50,7 +50,7 @@ class GameScreen(Frame):
 
         self.map = World(pygame.image.load("assets/tiles/game_loop.png"))
 
-        self.tower_placer = TowerPlacer()
+        self.tower_placer = TowerPlacer(None)
         self.towers = []
 
     def update(self, dt):
@@ -101,8 +101,8 @@ class GameScreen(Frame):
                 self.tower_placer.tower.y = pos_y
                 self.towers.append(self.tower_placer.tower)
 
-                image = pygame.image.load("assets/towers/knight.gif")
-                self.tower_placer = TowerPlacer()
+                self.tower_placer = TowerPlacer(Tower())
+                set_tower(self)
                 self.selected_tower = 0
 
     def toggle_settings(self):
@@ -119,6 +119,11 @@ class GameScreen(Frame):
             2: "assets/towers/archer.gif",
             3: "assets/towers/wizard.gif",
         }
+        tower_types = {
+            1: "knight",
+            2: "archer",
+            3: "wizard",
+        }
         animation_path = animation_paths.get(t)
         if animation_path:
-            self.tower_placer.set_animation(animation_path)
+            tower_image = pygame.image.load(animation_path)
